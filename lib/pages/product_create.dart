@@ -12,13 +12,9 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String _titleValue= '';
   String _descriptionValue= '';
   double _priceValue= 0.0;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-    margin: EdgeInsets.all(10.0),  
-    child: ListView(
-      children: <Widget>[
-        TextField(
+
+Widget _buildTitleTextField(){
+    return TextField(
           decoration: InputDecoration(
             labelText: 'Product Title',
             
@@ -29,9 +25,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
               _titleValue = value;
             });
           },
-        ),
-        TextField(
-
+        );
+  }
+Widget  _buildDescriptionTextField(){
+  return TextField(
           autofocus: true,
           maxLines: 4,
           decoration: InputDecoration(
@@ -43,8 +40,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
               _descriptionValue = value;
             });
           },
-        ),
-        TextField(
+        );
+}
+Widget _buildPriceTextField(){
+  return TextField(
           autofocus: true,
           decoration: InputDecoration(
             labelText: 'Product Price',
@@ -56,15 +55,11 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
               _priceValue = double.parse(value);
             });
           },
-        ),
-        SizedBox(
-          height: 10.0,
-        ),
-        RaisedButton(
-          child: Text("Save"),
-          color: Theme.of(context).accentColor,
-          textColor: Colors.white,
-          onPressed: (){
+        );
+}
+
+void _submitForm(){
+  
             final Map<String,dynamic> product = {
               'title':_titleValue,
               'description':_descriptionValue,
@@ -73,7 +68,28 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
               };
             widget.addProduct(product);
             Navigator.pushReplacementNamed(context, '/');
-          },
+          
+}
+  @override
+  Widget build(BuildContext context) {
+    final double deviceWidth =MediaQuery.of(context).size.width;
+    final double targetWidth =deviceWidth > 768.0 ? 500.0 :deviceWidth * 0.95;
+    final double targetPadding =deviceWidth - targetWidth;
+    return Container(
+    margin: EdgeInsets.all(10.0),  
+    child: ListView(
+      padding: EdgeInsets.symmetric(horizontal: targetPadding/2),
+      children: <Widget>[
+        _buildTitleTextField(),
+        _buildDescriptionTextField(),
+        _buildPriceTextField(),
+        SizedBox(
+          height: 10.0,
+        ),
+        RaisedButton(
+          child: Text("Save"),
+          textColor: Colors.white,
+          onPressed: _submitForm,
         )
       ],
     )
